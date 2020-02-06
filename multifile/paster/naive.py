@@ -18,7 +18,7 @@ def naive_paste(input_paths, output_path, delimeter='', from_line=0, n_header_li
         output_file = open(output_path, 'w')
 
         for cell, metadata in reader:
-            if not cell:
+            if metadata.get('skipped', False):
                 continue
 
             if cell_preprocessor:

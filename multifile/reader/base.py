@@ -40,7 +40,9 @@ class BaseMultifileReader:
         if not self._should_read():
             next(f)
             cell = None
-            metadata = None
+            metadata = {
+                'skipped': True,
+            }
         else:
             # Attempt to read a line
             cell = f.readline()
