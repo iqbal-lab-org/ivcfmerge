@@ -1,6 +1,6 @@
 import argparse
 
-from .paster import VCFPaster
+from multifile.paster.vcf.paster import VCFPaster
 
 
 def main():

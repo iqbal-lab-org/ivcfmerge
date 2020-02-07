@@ -4,6 +4,7 @@ import tempfile
 from hypothesis import given, strategies as st
 
 from multifile.paster.incremental import naive_paste_incremental
+from multifile.reader.plain import PlainMultifileReader
 
 
 THIS_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -17,8 +18,10 @@ def test_naive_paste_incremental_batch_size_less_than_one(batch_size):
     test_files = ['ref_1.vcf', 'ref_2.vcf']
     input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]
     output_file = tempfile.NamedTemporaryFile(mode='r+')
+
+    reader = PlainMultifileReader(input_paths)
     
-    naive_paste_incremental(input_paths, output_file.name, batch_size=batch_size)
+    naive_paste_incremental(reader, output_file.name, batch_size=batch_size)
 
     assert output_file.read() == ''
 
@@ -28,7 +31,9 @@ def test_naive_paste_incremental_batch_size_one():
     input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]
     output_file = tempfile.NamedTemporaryFile(mode='r+')
 
-    naive_paste_incremental(input_paths, output_file.name, batch_size=1)
+    reader = PlainMultifileReader(input_paths)
+    
+    naive_paste_incremental(reader, output_file.name, batch_size=1)
 
     with open(REF_MERGED_FILE, 'r') as ref_merged:
         assert output_file.read() == ref_merged.read()
@@ -41,7 +46,9 @@ def test_naive_paste_incremental_one_batch(pool):
     output_file = tempfile.NamedTemporaryFile(mode='r+')
     batch_size = pool.draw(st.integers(min_value=len(input_paths)))
 
-    naive_paste_incremental(input_paths, output_file.name, batch_size=batch_size)
+    reader = PlainMultifileReader(input_paths)
+    
+    naive_paste_incremental(reader, output_file.name, batch_size=batch_size)
 
     with open(REF_MERGED_FILE, 'r') as ref_merged:
         assert output_file.read() == ref_merged.read()
@@ -53,7 +60,9 @@ def test_naive_paste_incremental(batch_size):
     input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]
     output_file = tempfile.NamedTemporaryFile(mode='r+')
 
-    naive_paste_incremental(input_paths, output_file.name, batch_size=batch_size)
+    reader = PlainMultifileReader(input_paths)
+    
+    naive_paste_incremental(reader, output_file.name, batch_size=batch_size)
 
     with open(REF_BATCH_MERGED_FILE, 'r') as ref_merged:
         assert output_file.read() == ref_merged.read()

@@ -1,20 +1,21 @@
 import shutil
 
-from multifile.reader.default import DefaultMultifileReader
+from multifile.reader.header_aware import HeaderAwareMultifileReader
+from multifile.reader.plain import PlainMultifileReader
 
 
-def naive_paste(input_paths, output_path, delimeter='', from_line=0, n_header_lines=0, cell_preprocessor=None):
+def naive_paste(reader, output_path, delimeter='', cell_preprocessor=None):
     """Naive implementation of Unix's 'paste' utility.
     
     Assumptions:
     - All files have the same number of lines.
     """
 
-    if len(input_paths) == 1:
-        shutil.copyfile(input_paths[0], output_path)
+    if len(reader.paths) == 1:
+        shutil.copyfile(reader.paths[0], output_path)
         return
 
-    with DefaultMultifileReader(input_paths, from_line=from_line, n_header_lines=n_header_lines) as reader:
+    with reader:
         output_file = open(output_path, 'w')
 
         for cell, metadata in reader:

@@ -9,8 +9,7 @@ class BaseMultifileReader:
     """
 
     def __init__(self, paths):
-        self._paths = paths
-        self._n_files = len(self._paths)
+        self.paths = paths
 
     def __enter__(self):
         self._files = [open(p, 'r') for p in self._paths]
@@ -77,3 +76,12 @@ class BaseMultifileReader:
 
     def _should_read(self):
         raise NotImplementedError
+
+    @property
+    def paths(self):
+        return self._paths
+
+    @paths.setter
+    def paths(self, paths):
+        self._paths = paths
+        self._n_files = len(self._paths)
