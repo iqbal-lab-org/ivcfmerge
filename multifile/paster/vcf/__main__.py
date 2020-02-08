@@ -12,9 +12,11 @@ def main():
     parser.add_argument('--n-header-lines', type=int, default=11, help="number of header lines (will be read only once)")
     parser.add_argument('--n-fixed-cols', type=int, default=9, help="number of fixed columns on the left")
     parser.add_argument('--n-samples-each', type=int, default=1, help="number of samples each input file")
+    parser.add_argument('-t', '--temp-dir-path', type=str, help="path to directory for storing temporary files while pasting")
     args = parser.parse_args()
 
-    paster = VCFPaster(args.input_paths, args.output_path, args.delimeter, args.batch_size, args.n_header_lines, args.n_fixed_cols, args.n_samples_each)
+    paster = VCFPaster(args.input_paths, args.output_path, args.delimeter, args.batch_size,
+                        args.n_header_lines, args.n_fixed_cols, args.n_samples_each, args.temp_dir_path)
     paster.paste()
 
 

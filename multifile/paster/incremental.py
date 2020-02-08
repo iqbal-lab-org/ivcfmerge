@@ -4,7 +4,7 @@ import tempfile
 from .naive import naive_paste
 
 
-def naive_paste_incremental(reader, output_path, delimeter='', batch_size=999, cell_preprocessor=None):
+def naive_paste_incremental(reader, output_path, delimeter='', batch_size=999, cell_preprocessor=None, temp_dir_path=None):
     if batch_size < 1:
         return
 
@@ -15,13 +15,13 @@ def naive_paste_incremental(reader, output_path, delimeter='', batch_size=999, c
     start = 0
     original_input_paths = reader.paths
 
-    previous_temp_output_file = tempfile.NamedTemporaryFile('r+')
+    previous_temp_output_file = tempfile.NamedTemporaryFile('r+', dir=temp_dir_path)
     while True:
         batch = original_input_paths[start : start + batch_size]
         if not batch:
             break
 
-        temp_output_file = tempfile.NamedTemporaryFile('r+')
+        temp_output_file = tempfile.NamedTemporaryFile('r+', dir=temp_dir_path)
 
         if start > 0:
             batch = [previous_temp_output_file.name] + batch
