@@ -19,7 +19,8 @@ class VCFPaster:
 
         return naive_paste_incremental(
             reader, self._output_path, self._delimeter, self._batch_size,
-            cell_preprocessor=self._strip_fixed_cols_from_line, temp_dir_path=self._temp_dir_path)
+            cell_preprocessor=self._strip_fixed_cols_from_line, temp_dir_path=self._temp_dir_path,
+            keep_input_order=False)
 
     def _strip_fixed_cols_from_line(self, line, metadata):
         if self._is_header_line(metadata['line_idx']) or self._is_first_file(metadata['file_idx']):

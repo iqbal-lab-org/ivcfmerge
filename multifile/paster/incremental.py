@@ -1,3 +1,4 @@
+import os
 import shutil
 import tempfile
 
@@ -15,25 +16,22 @@ def naive_paste_incremental(reader, output_path, delimeter='', batch_size=999, c
     start = 0
     original_input_paths = reader.paths
 
-    previous_temp_output_file = tempfile.NamedTemporaryFile('r+', dir=temp_dir_path)
-    while True:
-        batch = original_input_paths[start : start + batch_size]
-        if not batch:
-            break
+    with tempfile.TemporaryDirectory(dir=temp_dir_path) as temp_dir:
+        while True:
+            end = start + batch_size
+            batch = original_input_paths[start : end]
+            if not batch:
+                break
 
-        temp_output_file = tempfile.NamedTemporaryFile('r+', dir=temp_dir_path)
+            temp_output_path = os.path.join(temp_dir, '%s_%s' % (start, end))
 
-        if start > 0:
+            reader.paths = batch
+            naive_paste(reader, temp_output_path, delimeter, cell_preprocessor)
+
+            start += batch_size
             if keep_input_order:
-                batch = [previous_temp_output_file.name] + batch
+                original_input_paths.insert(start, temp_output_path)
             else:
-                batch.append(previous_temp_output_file.name)
-        
-        reader.paths = batch
-        naive_paste(reader, temp_output_file.name, delimeter, cell_preprocessor)
+                original_input_paths.append(temp_output_path)
 
-        start += batch_size
-        shutil.copyfile(temp_output_file.name, previous_temp_output_file.name)
-
-    shutil.copyfile(previous_temp_output_file.name, output_path)
-
+        shutil.copyfile(temp_output_path, output_path)

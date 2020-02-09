@@ -81,7 +81,7 @@ def test_naive_paste_incremental_ignore_input_order(batch_size):
     naive_paste_incremental(reader, output_file.name, batch_size=batch_size, keep_input_order=False)
 
     if batch_size == 2:
-        with open(REF_3412_FILE, 'r') as ref_merged:
+        with open(REF_BATCH_MERGED_FILE, 'r') as ref_merged:
             assert output_file.read() == ref_merged.read()
     elif batch_size == 3:
         with open(REF_4123_FILE, 'r') as ref_merged:
