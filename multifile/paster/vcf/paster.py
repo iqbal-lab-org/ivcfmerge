@@ -26,13 +26,8 @@ class VCFPaster:
         if self._is_header_line(metadata['line_idx']) or self._is_first_file(metadata['file_idx']):
             return line
 
-        # Decide whether split & slice from left or right is shorter
-        if self._n_samples_each < self._n_fixed_cols:
-            cells = line.rsplit(self._delimeter, maxsplit=self._n_samples_each)
-            sample_cells = cells[-self._n_samples_each:]
-        else:
-            cells = line.split(delimeter, maxsplit=self._n_fixed_cols)
-            sample_cells = cells[self._n_fixed_cols:]
+        cells = line.split(self._delimeter, maxsplit=self._n_fixed_cols)
+        sample_cells = cells[self._n_fixed_cols:]
 
         new_line = self._delimeter.join(sample_cells)
         return new_line
