@@ -11,7 +11,6 @@ THIS_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_DATA_DIR = os.path.join(THIS_SCRIPT_DIR, 'data')
 REF_MERGED_FILE = os.path.join(TEST_DATA_DIR, 'ref_merged.vcf')
 REF_BATCH_MERGED_FILE = os.path.join(TEST_DATA_DIR, 'ref_batch_merged.vcf')
-REF_3412_FILE = os.path.join(TEST_DATA_DIR, 'ref_batch_merged_3412.vcf')
 REF_4123_FILE = os.path.join(TEST_DATA_DIR, 'ref_batch_merged_4123.vcf')
 
 
