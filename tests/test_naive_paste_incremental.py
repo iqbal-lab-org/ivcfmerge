@@ -1,7 +1,7 @@
 import os
 import tempfile
 
-from hypothesis import given, strategies as st
+from hypothesis import given, strategies as st, settings
 
 from multifile.paster.incremental import naive_paste_incremental
 from multifile.reader.plain import PlainMultifileReader
@@ -70,6 +70,7 @@ def test_naive_paste_incremental(batch_size):
 
 
 @given(batch_size=st.integers(min_value=2, max_value=3))
+@settings(deadline=None)
 def test_naive_paste_incremental_ignore_input_order(batch_size):
     test_files = ['ref_1.vcf', 'ref_2.vcf', 'ref_3.vcf', 'ref_4.vcf']
     input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]
@@ -79,9 +80,20 @@ def test_naive_paste_incremental_ignore_input_order(batch_size):
     
     naive_paste_incremental(reader, output_file.name, batch_size=batch_size, keep_input_order=False)
 
-    if batch_size == 2:
-        with open(REF_BATCH_MERGED_FILE, 'r') as ref_merged:
-            assert output_file.read() == ref_merged.read()
-    elif batch_size == 3:
-        with open(REF_4123_FILE, 'r') as ref_merged:
-            assert output_file.read() == ref_merged.read()
+    output = output_file.read()
+    assert all([('FORMAT	%d' % i) in output for i in [1, 2, 4]])
+
+
+@given(batch_size=st.integers(min_value=2, max_value=3))
+@settings(deadline=None)
+def test_naive_paste_incremental_many_workers(batch_size):
+    test_files = ['ref_1.vcf', 'ref_2.vcf', 'ref_3.vcf', 'ref_4.vcf']
+    input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]
+    output_file = tempfile.NamedTemporaryFile(mode='r+')
+
+    reader = PlainMultifileReader(input_paths)
+    
+    naive_paste_incremental(reader, output_file.name, batch_size=batch_size, keep_input_order=False, max_workers=2)
+
+    output = output_file.read()
+    assert all([('FORMAT	%d' % i) in output for i in [1, 2, 4]])
