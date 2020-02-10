@@ -1,4 +1,4 @@
-from ..parallel import naive_paste_parallel
+from .. import naive_paste_incremental
 
 from multifile.reader.header_aware import HeaderAwareMultifileReader
 
@@ -17,10 +17,10 @@ class VCFPaster:
     def paste(self):
         reader = HeaderAwareMultifileReader(self._input_paths, n_header_lines=self._n_header_lines)
 
-        return naive_paste_parallel(
+        return naive_paste_incremental(
             reader, self._output_path, self._delimeter, self._batch_size,
             cell_preprocessor=self._strip_fixed_cols_from_line, temp_dir_path=self._temp_dir_path,
-            keep_input_order=False, n_processes=self._n_processes)
+            keep_input_order=False)
 
     def _strip_fixed_cols_from_line(self, line, metadata):
         if self._is_header_line(metadata['line_idx']) or self._is_first_file(metadata['file_idx']):
