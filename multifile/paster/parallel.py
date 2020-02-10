@@ -5,13 +5,14 @@ from multifile.paster.incremental import naive_paste_incremental
 
 
 def naive_paste_parallel(reader, output_path, delimeter='', batch_size=2, cell_preprocessor=None, temp_dir_path=None, keep_input_order=True, n_processes=1, _recurred_run_count_auto=0):
-    if n_processes <= 1 or len(reader.paths) <= batch_size:
+    if n_processes <= 1:
         naive_paste_incremental(reader, output_path, delimeter, batch_size, cell_preprocessor, temp_dir_path, keep_input_order)
         return
 
     chunk_size = int(len(reader.paths) / n_processes)
-    if chunk_size == 0:
-        chunk_size = 1
+    if chunk_size <= 2:
+        naive_paste_incremental(reader, output_path, delimeter, batch_size, cell_preprocessor, temp_dir_path, keep_input_order)
+        return
 
     readers = []
     output_paths = []
