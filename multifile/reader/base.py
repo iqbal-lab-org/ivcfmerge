@@ -28,8 +28,10 @@ class BaseMultifileReader:
     def __next__(self):
         try:
             return self._cell_by_cell()
-        except AttributeError:
-            raise Exception("Files not opened. Open files by creating the reader in a 'with' statement.")
+        except AttributeError as e:
+            if '_files' in str(e):
+                raise Exception("Files not opened. Open files by creating the reader in a 'with' statement.")
+            raise
 
     def _cell_by_cell(self):
         self._file_idx, f = next(self._files_cycle)
