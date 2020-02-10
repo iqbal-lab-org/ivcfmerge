@@ -66,15 +66,20 @@ def test_naive_paste_proper_headers():
         assert output_file.read() == ref_merged.read()
 
 
-# def test_naive_paste_cell_preprocessor():
-#     test_files = ['ref_1.vcf', 'ref_2.vcf']
-#     input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]
-#     output_file = tempfile.NamedTemporaryFile(mode='r+')
+def test_naive_paste_cell_preprocessor():
+    test_files = ['ref_1.vcf', 'ref_2.vcf']
+    input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]
+    output_file = tempfile.NamedTemporaryFile(mode='r+')
+    from_line = 11
 
-#     def fn(cell, metadata):
-#         return cell.rsplit('\t', maxsplit=1)[1]
+    def fn(cell, metadata):
+        if metadata['line_idx'] >= from_line:
+            return cell.rsplit('\t', maxsplit=1)[1]
+        return cell
 
-#     naive_paste(input_paths, output_file.name, from_line=11, cell_preprocessor=fn)
+    reader = SkipTopMultifileReader(input_paths, from_line=from_line)
 
-#     with open(REF_STRIPPED_COLS, 'r') as ref_merged:
-#         assert output_file.read() == ref_merged.read()
+    naive_paste(reader, output_file.name, cell_preprocessor=fn)
+
+    with open(REF_STRIPPED_COLS, 'r') as ref_merged:
+        assert output_file.read() == ref_merged.read()
