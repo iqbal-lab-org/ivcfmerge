@@ -23,3 +23,23 @@ paste_vcf -h
 * `multifile/paster/naive.py`: Generic paster which the incremental paster is based on
 * `multifile/reader/header_aware.py`: Header-aware incremental reader which the generic paster uses to read "combined line" from multiple files
 * `multifile/reader/base.py`: Base incremental reader which the header-aware one is based on
+
+# Development
+
+## Dev dependencies
+
+```
+pip3 install -r requirements/dev.txt
+```
+
+## (Optional) Install editable version
+
+```
+pip3 install -e .
+```
+
+## Run all tests
+
+```
+pytest
+```
