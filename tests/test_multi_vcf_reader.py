@@ -48,3 +48,13 @@ def test_iterating_reader_yields_lines_in_correct_order(ref_data, expected_lines
     with MultiVCFReader(ref_data['input_paths']) as reader:
         for line in expected_lines:
             assert next(reader) == line
+
+
+def test_reader_closes_files_on_exit(ref_data, mocker):
+    n_files = len(ref_data['input_paths'])
+    mocked_files = [mocker.MagicMock() for _ in range(n_files)]
+
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        mocker.patch.object(reader, '_files', new=mocked_files)
+
+    [f.close.assert_called() for f in mocked_files]
