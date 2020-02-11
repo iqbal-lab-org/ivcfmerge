@@ -1,7 +1,7 @@
 import os
 import tempfile
 
-from hypothesis import given, strategies as st, settings
+from hypothesis import given, strategies as st
 
 from multifile.paster.incremental import naive_paste_incremental
 from multifile.reader.plain import PlainMultifileReader
@@ -11,7 +11,6 @@ THIS_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_DATA_DIR = os.path.join(THIS_SCRIPT_DIR, 'data')
 REF_MERGED_FILE = os.path.join(TEST_DATA_DIR, 'ref_merged.vcf')
 REF_BATCH_MERGED_FILE = os.path.join(TEST_DATA_DIR, 'ref_batch_merged.vcf')
-REF_4123_FILE = os.path.join(TEST_DATA_DIR, 'ref_batch_merged_4123.vcf')
 
 
 @given(batch_size=st.integers(max_value=0))
@@ -70,7 +69,6 @@ def test_naive_paste_incremental(batch_size):
 
 
 @given(batch_size=st.integers(min_value=2, max_value=3))
-@settings(deadline=None)
 def test_naive_paste_incremental_ignore_input_order(batch_size):
     test_files = ['ref_1.vcf', 'ref_2.vcf', 'ref_3.vcf', 'ref_4.vcf']
     input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]
@@ -85,7 +83,6 @@ def test_naive_paste_incremental_ignore_input_order(batch_size):
 
 
 @given(batch_size=st.integers(min_value=2, max_value=3))
-@settings(deadline=None)
 def test_naive_paste_incremental_many_workers(batch_size):
     test_files = ['ref_1.vcf', 'ref_2.vcf', 'ref_3.vcf', 'ref_4.vcf']
     input_paths = [os.path.join(TEST_DATA_DIR, filename) for filename in test_files]

@@ -8,7 +8,6 @@ THIS_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 TEST_DATA_DIR = os.path.join(THIS_SCRIPT_DIR, 'data')
 REF_FIXED_COLS = os.path.join(TEST_DATA_DIR, 'ref_fixed_cols.vcf')
 REF_FIXED_COLS_NON_TRIVIAL = os.path.join(TEST_DATA_DIR, 'ref_fixed_cols_incremental.vcf')
-REF_FIXED_COLS_NON_TRIVIAL_PARALLEL = os.path.join(TEST_DATA_DIR, 'ref_fixed_cols_parallel.vcf')
 
 
 def test_vcf_paste():

@@ -25,7 +25,7 @@ def naive_paste_incremental(reader, output_path, delimeter='', batch_size=2, cel
     remaining_batches, last_batch_size = total_number_of_batches_and_last_batch_size(len(reader.paths), batch_size)
 
     work_queue = Queue()
-    [work_queue.put_nowait(p) for p in reader.paths]
+    [work_queue.put(p) for p in reader.paths]
 
     with futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
         with tempfile.TemporaryDirectory(dir=temp_dir_path) as temp_dir:
@@ -40,7 +40,7 @@ def naive_paste_incremental(reader, output_path, delimeter='', batch_size=2, cel
                     break
 
                 future = executor.submit(process_one_batch, cloned_reader, delimeter, temp_dir, cell_preprocessor)
-                future.add_done_callback(lambda ft: work_queue.put_nowait(ft.result()))
+                future.add_done_callback(lambda ft: work_queue.put(ft.result()))
 
 
 def process_one_batch(cloned_reader, delimeter, temp_dir, cell_preprocessor):
@@ -74,10 +74,7 @@ def get_batch(queue, batch_size, remaining_batches, last_batch_size):
     batch = []
 
     while (len(batch) < batch_size and remaining_batches > 1) or len(batch) < last_batch_size:
-        try:
-            batch.append(queue.get_nowait())
-        except Empty:
-            pass
+        batch.append(queue.get())
 
     remaining_batches -= 1
 
