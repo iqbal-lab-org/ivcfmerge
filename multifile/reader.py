@@ -5,6 +5,7 @@ class MultiVCFReader:
     def __init__(self, input_paths):
         self._input_paths = input_paths
         self.headers = []
+        self.samples = set()
 
     def __enter__(self):
         self._files = map(lambda p: open(p, 'r'), self._input_paths)
@@ -26,6 +27,11 @@ class MultiVCFReader:
 
         if line.startswith('##') and line not in self.headers:
             self.headers.append(line)
+        elif line.startswith('#'):
+            parts = line.split('FORMAT\t', maxsplit=1)
+            if len(parts) > 1:
+                samples_in_line = parts[1].split('\t')
+                self.samples.update(*samples_in_line)
 
         return line
 

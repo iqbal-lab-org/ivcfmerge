@@ -39,6 +39,20 @@ def expected_headers(expected_lines):
     return headers
 
 
+@pytest.fixture
+def expected_samples(expected_lines):
+    samples = set()
+
+    for line in expected_lines:
+        if line.startswith('#'):
+            line = line.split('FORMAT\t', maxsplit=1)
+            if len(line) > 1:
+                samples_in_line = line[1].split('\t')
+                samples.update(*samples_in_line)
+
+    return samples
+
+
 def test_reader_implements_context_manager_protocol(ref_data):
     with MultiVCFReader(ref_data['input_paths']) as reader:
         pass
@@ -98,3 +112,11 @@ def test_reader_collects_headers(ref_data, expected_headers):
             pass
 
         assert reader.headers == expected_headers
+
+
+def test_reader_collects_sample_names(ref_data, expected_samples):
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        for _ in reader:
+            pass
+
+        assert reader.samples == expected_samples
