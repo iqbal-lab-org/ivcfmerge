@@ -1,4 +1,5 @@
 import itertools
+from warnings import warn
 
 
 class MultiVCFReader:
@@ -45,7 +46,12 @@ class MultiVCFReader:
         def is_valid(f):
             line = f.readline()
             f.seek(0)
-            return line.startswith('##fileformat=VCF')
+
+            is_valid = line.startswith('##fileformat=VCF')
+            if not is_valid:
+                warn(InvalidFileWarning(f.name, "##fileformat=VCF... header not found"))
+
+            return is_valid
         
         return filter(is_valid, files)
 
@@ -53,3 +59,12 @@ class MultiVCFReader:
 class BadUsageError(Exception):
     def __str__(self):
         return "MultiVCFReader should be used inside a context manager"
+
+
+class InvalidFileWarning(UserWarning):
+    def __init__(self, path, reason):
+        self._path = path
+        self._reason = reason
+
+    def __str__(self):
+        return "file %s is not a valid VCF. Reason: %s" % (self._path, self._reason)

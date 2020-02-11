@@ -2,7 +2,7 @@ import itertools
 import os
 import pytest
 
-from multifile.reader import MultiVCFReader, BadUsageError
+from multifile.reader import MultiVCFReader, BadUsageError, InvalidFileWarning
 
 
 @pytest.fixture
@@ -132,3 +132,12 @@ def test_reader_skips_invalid_files(ref_data):
             pass
 
         assert 'invalid_sample_name' not in reader.samples
+
+
+def test_reader_warns_about_invalid_files(ref_data):
+    input_paths = ref_data['input_paths'][:]
+    input_paths.insert(int(len(input_paths)/2), ref_data['invalid'])
+
+    with pytest.warns(InvalidFileWarning):
+        with MultiVCFReader(input_paths) as reader:
+            pass
