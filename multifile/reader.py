@@ -4,7 +4,7 @@ import itertools
 class MultiVCFReader:
     def __init__(self, input_paths):
         self._input_paths = input_paths
-        self.headers = set()
+        self.headers = []
 
     def __enter__(self):
         self._files = map(lambda p: open(p, 'r'), self._input_paths)
@@ -24,8 +24,8 @@ class MultiVCFReader:
 
         line = line.rstrip()
 
-        if line.startswith('##'):
-            self.headers.add(line)
+        if line.startswith('##') and line not in self.headers:
+            self.headers.append(line)
 
         return line
 

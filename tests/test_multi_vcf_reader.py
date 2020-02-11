@@ -30,11 +30,11 @@ def expected_lines(ref_data):
 
 @pytest.fixture
 def expected_headers(expected_lines):
-    headers = set()
+    headers = []
 
     for line in expected_lines:
-        if line.startswith('##'):
-            headers.add(line)
+        if line.startswith('##') and line not in headers:
+            headers.append(line)
 
     return headers
 
