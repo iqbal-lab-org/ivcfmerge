@@ -8,8 +8,10 @@ class MultiVCFReader:
         self.samples = set()
 
     def __enter__(self):
-        self._files = map(lambda p: open(p, 'r'), self._input_paths)
+        files = map(lambda p: open(p, 'r'), self._input_paths)
+        self._files = self._filter_valid_vcf_files(files)
         self._file_cycle = itertools.cycle(self._files)
+
         return self
 
     def __exit__(self, *args, **kwargs):
@@ -25,18 +27,27 @@ class MultiVCFReader:
 
         line = line.rstrip()
 
-        if line.startswith('##') and line not in self.headers:
-            self.headers.append(line)
+        if line.startswith('##'):
+            if line not in self.headers:
+                self.headers.append(line)
         elif line.startswith('#'):
             parts = line.split('FORMAT\t', maxsplit=1)
             if len(parts) > 1:
                 samples_in_line = parts[1].split('\t')
-                self.samples.update(*samples_in_line)
+                self.samples.update(samples_in_line)
 
         return line
 
     def __iter__(self):
         return self
+
+    def _filter_valid_vcf_files(self, files):
+        def is_valid(f):
+            line = f.readline()
+            f.seek(0)
+            return line.startswith('##fileformat=VCF')
+        
+        return filter(is_valid, files)
 
 
 class BadUsageError(Exception):

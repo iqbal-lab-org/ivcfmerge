@@ -13,7 +13,8 @@ def ref_data():
     input_filenames = ['ref_%d.vcf' % i for i in range(1, 7)]
 
     return {
-        'input_paths': [os.path.join(test_data_dir, filename) for filename in input_filenames]
+        'input_paths': [os.path.join(test_data_dir, filename) for filename in input_filenames],
+        'invalid': os.path.join(test_data_dir, 'ref_invalid.vcf'),
     }
 
 
@@ -120,3 +121,14 @@ def test_reader_collects_sample_names(ref_data, expected_samples):
             pass
 
         assert reader.samples == expected_samples
+
+
+def test_reader_skips_invalid_files(ref_data):
+    input_paths = ref_data['input_paths'][:]
+    input_paths.insert(int(len(input_paths)/2), ref_data['invalid'])
+
+    with MultiVCFReader(input_paths) as reader:
+        for _ in reader:
+            pass
+
+        assert 'invalid_sample_name' not in reader.samples
