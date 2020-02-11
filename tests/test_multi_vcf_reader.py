@@ -28,6 +28,17 @@ def expected_lines(ref_data):
     return map(lines_iterator, files)
 
 
+@pytest.fixture
+def expected_headers(expected_lines):
+    headers = set()
+
+    for line in expected_lines:
+        if line.startswith('##'):
+            headers.add(line)
+
+    return headers
+
+
 def test_reader_implements_context_manager_protocol(ref_data):
     with MultiVCFReader(ref_data['input_paths']) as reader:
         pass
@@ -79,3 +90,11 @@ def test_reader_closes_files_on_exit(ref_data, mocker):
         mocker.patch.object(reader, '_files', new=mocked_files)
 
     [f.close.assert_called() for f in mocked_files]
+
+
+def test_reader_collects_headers(ref_data, expected_headers):
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        for _ in reader:
+            pass
+
+        assert reader.headers == expected_headers
