@@ -21,4 +21,5 @@ class MultiVCFReader:
 
 
 class BadUsageError(Exception):
-    message = "Multi VCF reader should be used inside a context manager"
+    def __str__(self):
+        return "MultiVCFReader should be used inside a context manager"
