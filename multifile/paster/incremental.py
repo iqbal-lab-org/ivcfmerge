@@ -1,11 +1,12 @@
 import copy
-from concurrent import futures
 import math
 import os
-from multiprocessing import Queue
-from queue import Empty
 import shutil
 import tempfile
+
+import gevent
+from gevent.event import AsyncResult
+from gevent.queue import Queue
 
 from .naive import naive_paste
 
@@ -27,20 +28,20 @@ def naive_paste_incremental(reader, output_path, delimeter='', batch_size=2, cel
     work_queue = Queue()
     [work_queue.put(p) for p in reader.paths]
 
-    with futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
-        with tempfile.TemporaryDirectory(dir=temp_dir_path) as temp_dir:
-            while True:
-                batch, remaining_batches = get_batch(work_queue, batch_size, remaining_batches, last_batch_size)
- 
-                cloned_reader = copy.deepcopy(reader)
-                cloned_reader.paths = batch
+    with tempfile.TemporaryDirectory(dir=temp_dir_path) as temp_dir:
+        while True:
+            batch, remaining_batches = get_batch(work_queue, batch_size, remaining_batches, last_batch_size)
 
-                if remaining_batches == 0:
-                    naive_paste(cloned_reader, output_path, delimeter, cell_preprocessor)
-                    break
+            cloned_reader = copy.deepcopy(reader)
+            cloned_reader.paths = batch
 
-                future = executor.submit(process_one_batch, cloned_reader, delimeter, temp_dir, cell_preprocessor)
-                future.add_done_callback(lambda ft: work_queue.put(ft.result()))
+            if remaining_batches == 0:
+                naive_paste(cloned_reader, output_path, delimeter, cell_preprocessor)
+                break
+
+            result = AsyncResult()
+            gevent.spawn(process_one_batch, cloned_reader, delimeter, temp_dir, cell_preprocessor).link(result)
+            work_queue.put(result)
 
 
 def process_one_batch(cloned_reader, delimeter, temp_dir, cell_preprocessor):
@@ -74,7 +75,10 @@ def get_batch(queue, batch_size, remaining_batches, last_batch_size):
     batch = []
 
     while (len(batch) < batch_size and remaining_batches > 1) or len(batch) < last_batch_size:
-        batch.append(queue.get())
+        item = queue.get()
+        if isinstance(item, AsyncResult):
+            item = item.get()
+        batch.append(item)
 
     remaining_batches -= 1
 
