@@ -31,6 +31,8 @@ class MultiVCFReader:
         if line.startswith('##'):
             if line not in self.headers:
                 self.headers.append(line)
+            else:
+                line = ''
         elif line.startswith('#'):
             parts = line.split('FORMAT\t', maxsplit=1)
             if len(parts) > 1:

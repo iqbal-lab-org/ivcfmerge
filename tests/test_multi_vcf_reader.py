@@ -21,11 +21,21 @@ def ref_data():
 @pytest.fixture
 def expected_lines(ref_data):
     files = itertools.cycle(map(lambda p: open(p, 'r'), ref_data['input_paths']))
+    headers = []
+
     def lines_iterator(f):
         line = f.readline()
         if not line:
             raise StopIteration
+
+        if line.startswith('##'):
+            if line not in headers:
+                headers.append(line)
+            else:
+                line = ''
+
         return line.rstrip()
+
     return map(lines_iterator, files)
 
 
@@ -141,3 +151,10 @@ def test_reader_warns_about_invalid_files(ref_data):
     with pytest.warns(InvalidFileWarning):
         with MultiVCFReader(input_paths) as reader:
             pass
+
+
+def test_reader_outputs_headers_only_once(ref_data, expected_headers):
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        output = ''.join(reader)
+
+        assert all([output.count(h) == 1 for h in expected_headers])
