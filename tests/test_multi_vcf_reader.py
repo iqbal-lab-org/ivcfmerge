@@ -50,6 +50,14 @@ def test_iterating_reader_yields_lines_in_correct_order(ref_data, expected_lines
             assert next(reader) == line
 
 
+def test_reader_terminates_on_end_of_input(ref_data, expected_lines):
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        for _ in expected_lines:
+            next(reader)
+
+        with pytest.raises(StopIteration):
+            next(reader)
+
 def test_reader_closes_files_on_exit(ref_data, mocker):
     n_files = len(ref_data['input_paths'])
     mocked_files = [mocker.MagicMock() for _ in range(n_files)]

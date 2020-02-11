@@ -17,7 +17,11 @@ class MultiVCFReader:
         if not getattr(self, '_files', None):
             raise BadUsageError
 
-        return next(self._file_cycle).readline()
+        line = next(self._file_cycle).readline()
+        if not line:
+            raise StopIteration
+
+        return line
 
 
 class BadUsageError(Exception):
