@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from multifile.reader import MultiVCFReader
+from multifile.reader import MultiVCFReader, BadUsageError
 
 
 @pytest.fixture
@@ -22,5 +22,11 @@ def test_reader_implements_context_manager_protocol(ref_data):
 
 
 def test_reader_implements_iteration_protocol(ref_data):
-    reader = MultiVCFReader(ref_data['input_paths'])
-    next(reader)
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        next(reader)
+
+
+def test_reader_forces_using_context_manager_before_iterating(ref_data):
+    with pytest.raises(BadUsageError):
+        reader = MultiVCFReader(ref_data['input_paths'])
+        next(reader)

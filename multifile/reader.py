@@ -3,10 +3,16 @@ class MultiVCFReader:
         pass
 
     def __enter__(self):
-        pass
+        self._used_ctx_mgr = True
+        return self
 
     def __exit__(self, *args, **kwargs):
         pass
 
     def __next__(self):
-        pass
+        if not getattr(self, '_used_ctx_mgr', False):
+            raise BadUsageError
+
+
+class BadUsageError(Exception):
+    message = "Multi VCF reader should be used inside a context manager"
