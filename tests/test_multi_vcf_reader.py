@@ -1,3 +1,4 @@
+import itertools
 import os
 import pytest
 
@@ -9,11 +10,22 @@ def ref_data():
     this_script_dir = os.path.dirname(os.path.realpath(__file__))
     test_data_dir = os.path.join(this_script_dir, 'data')
 
-    input_filenames = ['ref_%d.vcf' % i for i in range(6)]
+    input_filenames = ['ref_%d.vcf' % i for i in range(1, 7)]
 
     return {
         'input_paths': [os.path.join(test_data_dir, filename) for filename in input_filenames]
     }
+
+
+@pytest.fixture
+def expected_lines(ref_data):
+    files = itertools.cycle(map(lambda p: open(p, 'r'), ref_data['input_paths']))
+    def lines_iterator(f):
+        line = f.readline()
+        if not line:
+            raise StopIteration
+        return line
+    return map(lines_iterator, files)
 
 
 def test_reader_implements_context_manager_protocol(ref_data):
@@ -30,3 +42,9 @@ def test_reader_forces_using_context_manager_before_iterating(ref_data):
     with pytest.raises(BadUsageError):
         reader = MultiVCFReader(ref_data['input_paths'])
         next(reader)
+
+
+def test_iterating_reader_yields_lines_in_correct_order(ref_data, expected_lines):
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        for line in expected_lines:
+            assert next(reader) == line
