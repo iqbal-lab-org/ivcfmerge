@@ -21,8 +21,6 @@ def test_reader_implements_context_manager_protocol(ref_data):
         pass
 
 
-def test_reader_forces_using_context_manager():
-    pass
-
-
-
+def test_reader_implements_iteration_protocol(ref_data):
+    reader = MultiVCFReader(ref_data['input_paths'])
+    next(reader)

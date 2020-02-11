@@ -7,3 +7,6 @@ class MultiVCFReader:
 
     def __exit__(self, *args, **kwargs):
         pass
+
+    def __next__(self):
+        pass
