@@ -24,7 +24,7 @@ def expected_lines(ref_data):
         line = f.readline()
         if not line:
             raise StopIteration
-        return line
+        return line.rstrip()
     return map(lines_iterator, files)
 
 
@@ -36,6 +36,12 @@ def test_reader_implements_context_manager_protocol(ref_data):
 def test_reader_implements_iteration_protocol(ref_data):
     with MultiVCFReader(ref_data['input_paths']) as reader:
         next(reader)
+
+
+def test_reader_can_be_iterated_in_for_loops(ref_data):
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        for _ in reader:
+            pass
 
 
 def test_reader_forces_using_context_manager_before_iterating(ref_data):
@@ -57,6 +63,13 @@ def test_reader_terminates_on_end_of_input(ref_data, expected_lines):
 
         with pytest.raises(StopIteration):
             next(reader)
+
+
+def test_read_lines_are_trimmed_of_their_original_newlines(ref_data, expected_lines):
+    with MultiVCFReader(ref_data['input_paths']) as reader:
+        for line in reader:
+            assert not line.endswith('\n')
+
 
 def test_reader_closes_files_on_exit(ref_data, mocker):
     n_files = len(ref_data['input_paths'])

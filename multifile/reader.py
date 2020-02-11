@@ -21,7 +21,10 @@ class MultiVCFReader:
         if not line:
             raise StopIteration
 
-        return line
+        return line.rstrip()
+
+    def __iter__(self):
+        return self
 
 
 class BadUsageError(Exception):
