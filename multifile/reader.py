@@ -10,7 +10,7 @@ class MultiVCFReader:
 
     def __enter__(self):
         files = map(lambda p: open(p, 'r'), self._input_paths)
-        self._files = self._filter_valid_vcf_files(files)
+        self._files = filter(self._is_valid_vcf, files)
         self._file_cycle = itertools.cycle(self._files)
 
         return self
@@ -44,18 +44,15 @@ class MultiVCFReader:
     def __iter__(self):
         return self
 
-    def _filter_valid_vcf_files(self, files):
-        def is_valid(f):
-            line = f.readline()
-            f.seek(0)
+    def _is_valid_vcf(self, f):
+        line = f.readline()
+        f.seek(0)
 
-            is_valid = line.startswith('##fileformat=VCF')
-            if not is_valid:
-                warn(InvalidFileWarning(f.name, "##fileformat=VCF... header not found"))
+        is_valid = line.startswith('##fileformat=VCF')
+        if not is_valid:
+            warn(InvalidFileWarning(f.name, "##fileformat=VCF... header not found"))
 
-            return is_valid
-        
-        return filter(is_valid, files)
+        return is_valid
 
 
 class BadUsageError(Exception):
