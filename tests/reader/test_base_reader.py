@@ -65,3 +65,20 @@ def test_reader_closes_files_on_exit(input_paths, mocker):
         mocker.patch.object(reader, '_files', new=mocked_files)
 
     [f.close.assert_called() for f in mocked_files]
+
+
+def test_reader_opens_and_closes_each_file_only_once(input_paths, mocker):
+    n_files = len(input_paths)
+    mocked_files = [mocker.MagicMock() for _ in range(n_files)]
+    mocked_open = mocker.mock_open(read_data='a')
+    mocker.patch('multifile.reader.base.open', mocked_open)
+
+    with MultifileReader(input_paths) as reader:
+        mocker.patch.object(reader, '_files', new=mocked_files)
+        for _ in reader:
+            pass
+
+    mocked_open.assert_has_calls([
+        mocker.call(p, 'r') for p in input_paths
+    ], any_order=True)
+    [f.close.assert_called_once() for f in mocked_files]
