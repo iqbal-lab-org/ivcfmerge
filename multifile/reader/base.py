@@ -30,4 +30,4 @@ class MultifileReader:
 
 class BadUsageError(Exception):
     def __str__(self):
-        return "Multifile readers should be used inside context managers"
+        return "multifile readers should be used inside context managers"

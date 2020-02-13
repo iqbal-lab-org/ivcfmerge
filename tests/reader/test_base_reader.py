@@ -1,5 +1,5 @@
 import itertools
-from pathlib import Path
+
 import pytest
 
 from multifile.reader.base import MultifileReader, BadUsageError
@@ -29,17 +29,6 @@ def test_reader_forces_using_context_manager_before_iterating(input_paths):
     with pytest.raises(BadUsageError):
         reader = MultifileReader(input_paths)
         next(reader)
-
-
-def test_reader_produces_equivalent_output_to_zipping_content_of_input_files(input_paths):
-    input_files = [open(p, 'r') for p in input_paths]
-    all_lines = [list(f) for f in input_files]  # [[all lines of file 1], [all lines of files 2], ...]
-    combined_lines = zip(*all_lines)            # [(all 1st lines), (all 2nd lines), ...]
-    flatten = itertools.chain(*combined_lines)
-    stripped = [l.rstrip() for l in flatten]
-
-    with MultifileReader(input_paths) as reader:
-        assert list(reader) == list(stripped)
 
 
 def test_read_lines_are_trimmed_of_their_original_newlines(input_paths):
@@ -78,6 +67,7 @@ def test_reader_opens_and_closes_each_file_only_once(input_paths, mocker):
         for _ in reader:
             pass
 
+    assert mocked_open.call_count == n_files
     mocked_open.assert_has_calls([
         mocker.call(p, 'r') for p in input_paths
     ], any_order=True)
