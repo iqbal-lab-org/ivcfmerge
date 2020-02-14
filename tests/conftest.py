@@ -13,5 +13,10 @@ def input_paths(test_data_dir):
 
 
 @pytest.fixture
+def simple_pasted_file(test_data_dir):
+    return test_data_dir.joinpath('ref_simple_paste.vcf')
+
+
+@pytest.fixture
 def invalid_vcf_file_path(test_data_dir):
     return test_data_dir.joinpath('ref_invalid.vcf')

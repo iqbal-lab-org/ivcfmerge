@@ -31,10 +31,9 @@ def test_reader_forces_using_context_manager_before_iterating(input_paths):
         next(reader)
 
 
-def test_read_lines_are_trimmed_of_their_original_newlines(input_paths):
+def test_final_output(input_paths, simple_pasted_file):
     with MultifileReader(input_paths) as reader:
-        for line in reader:
-            assert not line.endswith('\n')
+        assert ''.join(reader) == ''.join(open(simple_pasted_file, 'r'))
 
 
 def test_reader_terminates_on_end_of_input(input_paths):

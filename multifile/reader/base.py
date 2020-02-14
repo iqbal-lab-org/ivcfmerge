@@ -7,7 +7,7 @@ class MultifileReader:
 
     def __enter__(self):
         self._files = map(lambda p: open(p, 'r'), self._input_paths)
-        self._file_cycle = itertools.cycle(self._files)
+        self._file_cycle = itertools.cycle(enumerate(self._files))
 
         return self
 
@@ -18,11 +18,16 @@ class MultifileReader:
         if not getattr(self, '_file_cycle', None):
             raise BadUsageError
 
-        line = next(self._file_cycle).readline()
+        file_idx, file = next(self._file_cycle)
+
+        line = file.readline()
         if not line:
             raise StopIteration
 
-        return line.rstrip()
+        if file_idx < len(self._input_paths) - 1:
+            line = line.rstrip()
+
+        return line
 
     def __iter__(self):
         return self
