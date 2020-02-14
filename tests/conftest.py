@@ -13,8 +13,8 @@ def input_paths(test_data_dir):
 
 
 @pytest.fixture
-def simple_pasted_file(test_data_dir):
-    return test_data_dir.joinpath('ref_simple_paste.vcf')
+def ref_merged(test_data_dir):
+    return test_data_dir.joinpath('ref_merged.vcf')
 
 
 @pytest.fixture

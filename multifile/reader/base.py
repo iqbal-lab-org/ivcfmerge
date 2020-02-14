@@ -23,11 +23,21 @@ class MultifileReader:
         line = file.readline()
         if not line:
             raise StopIteration
+        
+        line = line.rstrip()
+
+        if file_idx > 0:
+            if line.startswith('##'):
+                line = ''
+            else:
+                line = line.split('\t', maxsplit=9)[-1]
 
         if file_idx < len(self._input_paths) - 1:
-            line = line.rstrip()
+            delimiter = '\t'
+        else:
+            delimiter = '\n'
 
-        return line
+        return line + delimiter
 
     def __iter__(self):
         return self
@@ -36,3 +46,16 @@ class MultifileReader:
 class BadUsageError(Exception):
     def __str__(self):
         return "multifile readers should be used inside context managers"
+
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('input_paths', type=str, nargs='+')
+    parser.add_argument('output_path', type=str)
+    args = parser.parse_args()
+
+    with open(args.output_path, 'w') as out_file:
+        with MultifileReader(args.input_paths) as reader:
+            for line in reader:
+                out_file.write(line)

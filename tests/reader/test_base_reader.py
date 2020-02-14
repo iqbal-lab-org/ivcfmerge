@@ -31,9 +31,9 @@ def test_reader_forces_using_context_manager_before_iterating(input_paths):
         next(reader)
 
 
-def test_final_output(input_paths, simple_pasted_file):
+def test_final_output(input_paths, ref_merged):
     with MultifileReader(input_paths) as reader:
-        assert ''.join(reader) == ''.join(open(simple_pasted_file, 'r'))
+        assert ''.join(reader) == ''.join(open(ref_merged, 'r'))
 
 
 def test_reader_terminates_on_end_of_input(input_paths):
