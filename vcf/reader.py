@@ -1,7 +1,7 @@
 import itertools
 
 
-class MultifileReader:
+class MultiVCFReader:
     def __init__(self, input_paths):
         self._input_paths = input_paths
 
@@ -56,6 +56,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     with open(args.output_path, 'w') as out_file:
-        with MultifileReader(args.input_paths) as reader:
+        with MultiVCFReader(args.input_paths) as reader:
             for line in reader:
                 out_file.write(line)
