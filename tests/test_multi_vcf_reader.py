@@ -1,5 +1,3 @@
-import itertools
-
 import pytest
 
 from vcf.reader import MultiVCFReader, BadUsageError
@@ -59,7 +57,7 @@ def test_reader_opens_and_closes_each_file_only_once(input_paths, mocker):
     n_files = len(input_paths)
     mocked_files = [mocker.MagicMock() for _ in range(n_files)]
     mocked_open = mocker.mock_open(read_data='a')
-    mocker.patch('multifile.reader.base.open', mocked_open)
+    mocker.patch('vcf.reader.open', mocked_open)
 
     with MultiVCFReader(input_paths) as reader:
         mocker.patch.object(reader, '_files', new=mocked_files)
