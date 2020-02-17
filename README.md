@@ -6,9 +6,10 @@ This repo provides a utility to join the genotype data from a large number of VC
 
 ## 1. Usage:
 ```
-python vcf/join.py <file_of_input_paths> <path_to_output>
+python vcf/join.py -t <temp_dir> <file_of_input_paths> <path_to_output>
 ```
 Where:
+* `-t <temp_dir>` is an optional but usually necessary option to specify where to store the temporary files during joining (see [disk caveat](#disk-caveat)).
 * `file_of_input_paths` is a plain text file where each line is the path to one of the VCFs to be joined.
 * `path_to_output` is where to write the joined VCF.
 
@@ -30,7 +31,7 @@ The reason is that, in order to avoid the OS' limit, the joining process has to 
 
 Work is being done to divide the input files so that the final stage has as many small files as possible, instead of a few big files.
 
-### 3.2 Disk space
+<a name="disk-caveat">### 3.2 Disk space</a>
 
 The utility makes use of as much disk space as the total amount used by the input files, so users should specify a directory with enough space via the `-t` or `--temp-dir` option. If not specified, the choice will be left to the Python's `tempfile` utility ([docs](https://docs.python.org/3/library/tempfile.html#tempfile.mkstemp)).
 
