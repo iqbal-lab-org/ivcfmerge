@@ -40,6 +40,10 @@ The utility makes use of as much disk space as the total amount used by the inpu
   ```
   pip install -e .
   ```
+* Install dev dependencies:
+  ```
+  pip install -r ./requirements/dev.txt
+  ```
 * Run the tests:
   ```
   pytest
