@@ -1,6 +1,6 @@
 import setuptools
 
 setuptools.setup(
-    name="multifile-reader-ORG-PYPI-USERNAME",
+    name="vcf-dev-only",
     packages=setuptools.find_packages()
 )

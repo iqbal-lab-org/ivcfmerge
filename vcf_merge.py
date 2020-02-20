@@ -1,6 +1,6 @@
 import argparse
 
-from core import merge_vcf_files
+from vcf.core import merge_vcf_files
 
 parser = argparse.ArgumentParser()
 parser.add_argument('file_of_input_paths', type=str)

@@ -1,7 +1,7 @@
 import itertools
 from contextlib import ExitStack
 
-from utils import assign_file_index_to_lines, parse_data, is_first_file, is_header, write_vcf
+from .utils import assign_file_index_to_lines, parse_data, is_first_file, is_header, write_vcf
 
 
 def merge_vcf_files(input_paths, output_path):
