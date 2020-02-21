@@ -1,7 +1,9 @@
 import itertools
 from contextlib import ExitStack
 
-from .utils import assign_file_index_to_lines, parse_data, is_first_file, is_header, write_vcf
+from .filters import not_subsequent_header
+from .transformers import strip_fixed_columns
+from .utils import assign_file_index_to_lines, write_vcf
 
 
 def merge_vcf_files(input_paths, output_path):
@@ -65,8 +67,7 @@ def merge_vcf_files(input_paths, output_path):
         # ]
         flatten = itertools.chain.from_iterable(grouped_by_row)
 
-        # Parse and transform each line accordingly
-        # Add additional transformers here
+        # Transform each line accordingly
         # [
         #  (0, header),
         #  (1, header),
@@ -75,10 +76,9 @@ def merge_vcf_files(input_paths, output_path):
         #  (1, genotype),
         #  ...
         # ]
-        parsed = itertools.starmap(parse_data, flatten)
+        transformed = itertools.starmap(transform, flatten)
 
         # Filter unwanted lines (duplicated headers, FILTER!=PASS, etc.)
-        # Add additional filters here
         # [
         #  (0, header),
         #  ...
@@ -86,7 +86,25 @@ def merge_vcf_files(input_paths, output_path):
         #  (1, genotype),
         #  ...
         # ]
-        deduped = filter(lambda item: is_first_file(item[0]) or not is_header(item[1]), parsed)
+        filtered = apply_filters(transformed)
 
         # Actually iterate the lines and write them
-        write_vcf(deduped, output_path, len(input_paths))
+        with open(output_path, 'w') as out_file:
+            write_vcf(filtered, out_file, len(input_paths))
+
+
+def transform(file_idx, line):
+    line = strip_fixed_columns(file_idx, line)
+
+    # Add additional transformers here, each should be a function that receives a (file index, line) argument pair and
+    # returns the transformed line
+
+    return file_idx, line
+
+
+def apply_filters(items):
+    items = filter(not_subsequent_header, items)
+
+    # Add additional filters here, each should be a function that receives a (file index, line) tuple and returns a bool
+
+    return items
