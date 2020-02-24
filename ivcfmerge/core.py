@@ -6,13 +6,16 @@ from .utils import assign_file_index_to_lines, write_vcf
 
 
 def ivcfmerge(infiles, outfile):
+    infiles_1, infiles_2 = itertools.tee(infiles)
+    n_infiles = len(list(infiles_1))
+
     # Create an iterator through the files with their indices
     # [
     #  (0, [line, line, ...]),  # file 1
     #  (1, [line, line, ...]),  # file 2
     #  ...
     # ]
-    file_enumerator = enumerate(infiles)
+    file_enumerator = enumerate(infiles_2)
 
     # Insert to each line of each file their file's index
     # [
@@ -79,7 +82,7 @@ def ivcfmerge(infiles, outfile):
     filtered = apply_filters(transformed)
 
     # Actually iterate the lines and write them
-    write_vcf(filtered, outfile, len(infiles))
+    write_vcf(filtered, outfile, n_infiles)
 
 
 def transform(file_idx, line):

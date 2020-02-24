@@ -14,11 +14,11 @@ less memory you need).
 from contextlib import ExitStack
 from ivcfmerge import ivcfmerge
 
-filenames = [...]    # List of relative/absolute paths to input files
+filenames = [...]    # List/iterator of relative/absolute paths to input files
 output_path = '...'  # Where to write the merged VCF to
 
 with ExitStack() as stack:
-    files = [stack.enter_context(open(fname)) for fname in filenames]
+    files = map(lambda fname: stack.enter_context(open(fname)), filenames)
     with open(output_path) as outfile:
         ivcfmerge(files, outfile)
 ```

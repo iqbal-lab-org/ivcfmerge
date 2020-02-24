@@ -16,7 +16,7 @@ def test_merging_example_input():
     ref_merged_path = 'tests/data/ref/merged.vcf'
 
     with ExitStack() as stack:
-        files = [stack.enter_context(open(fn)) for fn in input_paths]
+        files = map(lambda fn: stack.enter_context(open(fn)), input_paths)
         with TemporaryFile('w+') as outfile, open(ref_merged_path, 'r') as expected:
             ivcfmerge(files, outfile)
 
