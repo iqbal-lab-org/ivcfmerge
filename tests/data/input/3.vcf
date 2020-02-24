@@ -1,0 +1,20 @@
+##fileformat=VCFv4.2
+##source=minos, version 0.9.1
+##fileDate=2020-01-21
+##FORMAT=<ID=COV,Number=R,Type=Integer,Description="Number of reads on ref and alt alleles">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="total read depth from gramtools">
+##FORMAT=<ID=GT_CONF,Number=1,Type=Float,Description="Genotype confidence. Difference in log likelihood of most likely and next most likely genotype">
+##FILTER=<ID=MIN_GCP,Description="Minimum GT_CONF_PERCENTILE of 5.0">
+##FILTER=<ID=MIN_DP,Description="Minimum DP of 5">
+##FORMAT=<ID=GT_CONF_PERCENTILE,Number=1,Type=Float,Description="Percentile of GT_CONF">
+##minos_max_read_length=151
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	site.04.iso.1.subject.2292.lab_id.806052.seq_reps.1
+NC_000962.3	11	.	A	C	.	MIN_DP;MIN_GCP	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE	0/0:2:2,0:23.4:0.0
+NC_000962.3	19	.	T	A	.	MIN_GCP	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE	0/0:9:9,0:168.6:4.08
+NC_000962.3	22	.	G	C	.	MIN_GCP	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE	0/0:10:10,0:178.35:4.08
+NC_000962.3	29	.	C	G	.	MIN_GCP	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE	0/0:22:22,0:289.57:4.08
+NC_000962.3	31	.	A	G	.	MIN_GCP	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE	0/0:23:23,0:298.48:4.08
+NC_000962.3	40	.	A	T	.	MIN_GCP	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE	0/0:25:25,0:316.18:4.08
+NC_000962.3	61	.	A	G	.	MIN_GCP	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE	0/0:33:33,0:385.52:4.08
+NC_000962.3	64	.	G	C	.	MIN_GCP	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE	0/0:33:33,0:385.52:4.08

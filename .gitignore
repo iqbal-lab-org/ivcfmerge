@@ -1,3 +1,7 @@
 __pycache__
 *.pyc
 .hypothesis
+*.egg-info
+.env
+
+.idea
