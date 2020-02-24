@@ -10,7 +10,7 @@ def is_header(line):
     return line.startswith('##')
 
 
-def write_vcf(lines, out_file, n_input_files):
+def write_vcf(lines, outfile, n_input_files):
     """Iterate and write header and data lines correctly
 
     Keyword arguments:
@@ -23,4 +23,4 @@ def write_vcf(lines, out_file, n_input_files):
         if file_idx < n_input_files - 1 and not is_header(line):
             line = line.rstrip() + '\t'
 
-        out_file.write(line)
+        outfile.write(line)

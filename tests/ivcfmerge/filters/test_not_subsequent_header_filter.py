@@ -1,6 +1,6 @@
 from hypothesis import given, strategies as st
 
-from vcf.filters import not_subsequent_header
+from ivcfmerge.filters import not_subsequent_header
 
 
 @given(file_idx=st.just(0), line=st.text())

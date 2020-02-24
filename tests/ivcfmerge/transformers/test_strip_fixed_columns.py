@@ -1,6 +1,6 @@
 from hypothesis import given, strategies as st
 
-from vcf.transformers import strip_fixed_columns
+from ivcfmerge.transformers import strip_fixed_columns
 
 
 @given(file_idx=st.just(0), line=st.text())

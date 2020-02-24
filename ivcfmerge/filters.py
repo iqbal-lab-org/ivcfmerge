@@ -1,4 +1,4 @@
-from vcf.utils import is_header, is_first_file
+from .utils import is_header, is_first_file
 
 
 def not_subsequent_header(item):

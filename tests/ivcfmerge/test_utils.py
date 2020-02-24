@@ -1,14 +1,16 @@
+import itertools
 import tempfile
 
 from hypothesis import strategies as st, given
 
-from vcf.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf
+from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf
 
 
 @given(file_idx=st.integers(), lines=st.iterables(elements=st.text()))
-def test_assign_index_to_lines(file_idx, lines):
-    actual = assign_file_index_to_lines(file_idx, lines)
-    expected = [(file_idx, line) for line in lines]
+def test_assign_file_index_to_lines(file_idx, lines):
+    lines_copy_1, lines_copy_2 = itertools.tee(lines)
+    actual = assign_file_index_to_lines(file_idx, lines_copy_1)
+    expected = [(file_idx, line) for line in lines_copy_2]
 
     for a, e in zip(actual, expected):
         assert a == e

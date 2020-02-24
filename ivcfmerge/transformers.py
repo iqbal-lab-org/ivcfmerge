@@ -1,4 +1,4 @@
-from vcf.utils import is_first_file, is_header
+from .utils import is_first_file, is_header
 
 
 def strip_fixed_columns(file_idx, line):
