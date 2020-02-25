@@ -22,3 +22,10 @@ with ExitStack() as stack:
     with open(output_path) as outfile:
         ivcfmerge(files, outfile)
 ```
+
+## Batch size
+
+An important parameter for this utility is `batch_size`, which indicates how many files to open and merge each batch,
+since the total number of input files can exceed the number of open files allowed by the OS.
+
+The default value for this parameter is 1000.
