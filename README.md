@@ -2,9 +2,9 @@
 
 ## Purpose
 
-We provides a utility to merge a large number of VCF files (possibly too many to open at once) incrementally, that only use as
-much memory as each line in one of the input files takes (so the fewer samples you have in each of the input files, the
-less memory you need).
+We provides a utility to merge a large number of VCF files (possibly too many to open at once) incrementally, that only
+use as much memory as each line in one of the input files takes (so the fewer samples you have in each of the input
+files, the less memory you need).
 
 ## Usage
 
