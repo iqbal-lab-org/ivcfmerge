@@ -13,7 +13,8 @@ def ivcfmerge_batch(input_paths, output_path, batch_size=1000):
         batch = input_paths
     else:
         work_queue = Queue()
-        [work_queue.put(item) for item in input_paths]
+        for item in input_paths:
+            work_queue.put(item)
 
         while True:
             batch = []
