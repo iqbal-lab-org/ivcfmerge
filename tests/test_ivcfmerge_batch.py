@@ -8,14 +8,12 @@ from tests.conftest import _input_paths
 
 
 @given(batch_size=st.integers(min_value=2))
-def test_merging_example_input(batch_size, input_paths):
-    with NamedTemporaryFile('w+') as outfile:
+def test_merging_example_input(batch_size, input_paths, ref_merged_path):
+    with NamedTemporaryFile('w+') as outfile, open(ref_merged_path, 'r') as ref_merged:
         ivcfmerge_batch(input_paths, outfile.name, batch_size)
         output = outfile.read()
 
-        assert output.count('##') == 11
-        assert output.count('#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t') == 1
-        assert output.count('site') == len(input_paths)
+        assert output == ref_merged.read()
 
 
 @given(batch_size=st.one_of(
