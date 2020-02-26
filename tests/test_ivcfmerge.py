@@ -4,9 +4,7 @@ from tempfile import TemporaryFile
 from ivcfmerge import ivcfmerge
 
 
-def test_merging_example_input(input_paths):
-    ref_merged_path = 'tests/data/ref/merged.vcf'
-
+def test_merging_example_input(input_paths, ref_merged_path):
     with ExitStack() as stack:
         files = map(lambda fn: stack.enter_context(open(fn)), input_paths)
         with TemporaryFile('w+') as outfile, open(ref_merged_path, 'r') as expected:
@@ -17,14 +15,11 @@ def test_merging_example_input(input_paths):
 
 
 def test_single_input():
-    input_paths = [
-        'tests/data/input/1.vcf',
-    ]
-    ref_merged_path = 'tests/data/input/1.vcf'
+    input_path = 'tests/data/input/1.vcf'
 
     with ExitStack() as stack:
-        files = map(lambda fn: stack.enter_context(open(fn)), input_paths)
-        with TemporaryFile('w+') as outfile, open(ref_merged_path, 'r') as expected:
+        files = map(lambda fn: stack.enter_context(open(fn)), [input_path])
+        with TemporaryFile('w+') as outfile, open(input_path, 'r') as expected:
             ivcfmerge(files, outfile)
 
             outfile.seek(0)
