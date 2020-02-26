@@ -3,8 +3,7 @@
 ## Purpose
 
 We provides a utility to merge a large number of VCF files (possibly too many to open at once) incrementally, that only
-use as much memory as each line in one of the input files takes (so the fewer samples you have in each of the input
-files, the less memory you need).
+use almost as much memory as one merged line takes.
 
 ## Usage
 
@@ -28,7 +27,7 @@ with ExitStack() as stack:
 #### If the number of input files is big (cannot be opened all at once)
 
 ```python
-from ivcfmerge.batch import ivcfmerge_batch
+from ivcfmerge import ivcfmerge_batch
 
 filenames = [...]    # List/iterator of relative/absolute paths to input files
 output_path = '...'  # Where to write the merged VCF to
