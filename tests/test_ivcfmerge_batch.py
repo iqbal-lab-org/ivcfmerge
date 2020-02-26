@@ -35,3 +35,21 @@ def test_out_of_bound_batch_sizes_yield_the_same_output_as_normal_ivcfmerge(batc
         output = outfile.read()
 
     assert output == expected
+
+
+@given(batch_size=st.integers())
+def test_single_input_yields_the_same_output_as_normal_ivcfmerge(batch_size):
+    input_paths = ['tests/data/input/1.vcf']
+
+    with ExitStack() as stack:
+        files = map(lambda fn: stack.enter_context(open(fn)), input_paths)
+        with TemporaryFile('w+') as outfile:
+            ivcfmerge(files, outfile)
+            outfile.seek(0)
+            expected = outfile.read()
+
+    with NamedTemporaryFile('w+') as outfile:
+        ivcfmerge_batch(input_paths, outfile.name, batch_size)
+        output = outfile.read()
+
+    assert output == expected
