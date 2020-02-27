@@ -4,16 +4,21 @@
 
 We provides a utility to merge a large number of VCF files (possibly too many to open at once) incrementally, that only use almost as much memory as one merged line takes.
 
-## 2. Usage
+## 2 Important assumptions:
+
+* All input VCFs are positionally sorted, and the values for the FILTER column of each position are the same for all samples.
+* All input VCFs have the same headers and the same number of positions.
+
+## 3. Usage
 
 You can use the utility as either:
 
 * [A Python library](#python-usage)
 * [A Python script](#cli-usage)
 
-### <a name="python-usage">2.1 In Python</a>
+### <a name="python-usage">3.1 In Python</a>
 
-#### 2.1.1 If the number of input files is small (can be opened all at once)
+#### 3.1.1 If the number of input files is small (can be opened all at once)
 
 ```python
 from contextlib import ExitStack
@@ -28,7 +33,7 @@ with ExitStack() as stack:
         ivcfmerge(files, outfile)
 ```
 
-#### 2.1.2 If the number of input files is big (cannot be opened all at once)
+#### 3.1.2 If the number of input files is big (cannot be opened all at once)
 
 ```python
 from ivcfmerge import ivcfmerge_batch
@@ -40,7 +45,7 @@ batch_size = 1000    # How many files to open and merge at once
 ivcfmerge_batch(filenames, output_path, batch_size)
 ```
 
-##### 2.1.2.1 You may also need to specify a temporary directory
+##### 3.1.2.1 You may also need to specify a temporary directory
 
 That has at least as much space as that occupied by the input files to store intermediate results, in the batch processing version.
 
@@ -51,9 +56,9 @@ temp_dir = '...'  # for example, a directory on a mounted disk like /mnt/big_dis
 ivcfmerge_batch(filenames, output_path, batch_size, temp_dir)
 ```
 
-### <a name="cli-usage">2.2 Command line interface</a>
+### <a name="cli-usage">3.2 Command line interface</a>
 
-#### 2.2.1 If the number of input files is small (can be opened all at once)
+#### 3.2.1 If the number of input files is small (can be opened all at once)
 
 ```shell script
 # Prepare a file of paths to input VCF files
@@ -65,7 +70,7 @@ ivcfmerge_batch(filenames, output_path, batch_size, temp_dir)
 > python ivcfmerge.py input_paths.txt path/to/output/file
 ```
 
-#### 2.2.2 If the number of input files is big (cannot be opened all at once) 
+#### 3.2.2 If the number of input files is big (cannot be opened all at once) 
 
 ```shell script
 # Prepare a file of paths to input VCF files
@@ -77,7 +82,7 @@ ivcfmerge_batch(filenames, output_path, batch_size, temp_dir)
 > python ivcfmerge_batch.py --batch-size 1000 input_paths.txt path/to/output/file
 ```
 
-##### 2.1.2.1 You may also need to specify a temporary directory
+##### 3.2.2.1 You may also need to specify a temporary directory
 
 That has at least as much space as that occupied by the input files to store intermediate results, in the batch processing version.
 
@@ -87,15 +92,15 @@ That has at least as much space as that occupied by the input files to store int
 > python ivcfmerge_batch.py --batch-size 1000 --temp-dir /path/to/tmp/dir input_paths.txt path/to/output/file
 ```
 
-## 3. Important parameters
+## 4. Important parameters
  
-### 3.1 `batch_size`
+### 4.1 `batch_size`
 
 Indicates how many files to open and merge each batch, for the batch processing version.
 
 The default value for this parameter is 1000.
 
-### 3.2 `temp_dir`
+### 4.2 `temp_dir`
 
 For the batch processing version, the utility needs to store the intermediate results somewhere with as much space as the total space occupied by the input files.
 
