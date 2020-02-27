@@ -53,7 +53,7 @@ def test_single_input_yields_the_same_output_as_normal_ivcfmerge(batch_size):
     assert output == expected
 
 
-@given(batch_size=st.integers(min_value=2))
+@given(batch_size=st.integers())
 def test_custom_temporary_directory(batch_size, input_paths, ref_merged_path, tmpdir):
     temp_dir = tmpdir.mkdtemp()
 
