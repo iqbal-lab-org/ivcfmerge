@@ -36,9 +36,30 @@ batch_size = 1000    # How many files to open and merge at once
 ivcfmerge_batch(filenames, output_path, batch_size)
 ```
 
-## Batch size
+##### You may also need to specify a temporary directory
 
-An important parameter for this utility is `batch_size`, which indicates how many files to open and merge each batch,
-since the total number of input files can exceed the number of open files allowed by the OS.
+That has at least as much space as that occupied by the input files to store intermediate results, in the batch processing
+version.
+
+```python
+...
+temp_dir = '...'  # for example, a directory on a mounted disk like /mnt/big_disk/tmp or /media/big_disk/tmp
+
+ivcfmerge_batch(filenames, output_path, batch_size, temp_dir)
+```
+
+## Important parameters
+ 
+### `batch_size`
+
+Indicates how many files to open and merge each batch, for the batch processing version.
 
 The default value for this parameter is 1000.
+
+### `temp_dir`
+
+For the batch processing version, the utility needs to store the intermediate results somewhere with as much space as
+the total space occupied by the input files.
+
+By default, the choice is left to the [tempfile](https://docs.python.org/3/library/tempfile.html#tempfile.TemporaryFile)
+library. On Unix/Linux, this is usually `/tmp`.
