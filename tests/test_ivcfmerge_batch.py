@@ -51,3 +51,14 @@ def test_single_input_yields_the_same_output_as_normal_ivcfmerge(batch_size):
         output = outfile.read()
 
     assert output == expected
+
+
+@given(batch_size=st.integers(min_value=2))
+def test_custom_temporary_directory(batch_size, input_paths, ref_merged_path, tmpdir):
+    temp_dir = tmpdir.mkdtemp()
+
+    with NamedTemporaryFile('w+') as outfile, open(ref_merged_path, 'r') as ref_merged:
+        ivcfmerge_batch(input_paths, outfile.name, batch_size, temp_dir)
+        output = outfile.read()
+
+        assert output == ref_merged.read()

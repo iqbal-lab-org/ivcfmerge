@@ -61,5 +61,5 @@ The default value for this parameter is 1000.
 For the batch processing version, the utility needs to store the intermediate results somewhere with as much space as
 the total space occupied by the input files.
 
-By default, the choice is left to the [tempfile](https://docs.python.org/3/library/tempfile.html#tempfile.mkstemp)
+By default, the choice is left to the [tempfile](https://docs.python.org/3/library/tempfile.html#tempfile.TemporaryFile)
 library. On Unix/Linux, this is usually `/tmp`.
