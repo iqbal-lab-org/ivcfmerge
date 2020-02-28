@@ -4,7 +4,9 @@ from tempfile import NamedTemporaryFile
 from . import ivcfmerge
 
 
-def ivcfmerge_batch(input_paths, output_path, batch_size=1000, temp_dir=None):
+def ivcfmerge_batch(input_paths, output_path, batch_size=None, temp_dir=None):
+    batch_size = batch_size or 1000
+
     if batch_size < 2 or batch_size > len(input_paths):
         batch_size = len(input_paths)
 
