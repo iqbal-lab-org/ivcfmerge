@@ -1,7 +1,7 @@
 import itertools
 import tempfile
 
-from hypothesis import strategies as st, given
+from hypothesis import strategies as st, given, example
 
 from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf
 
@@ -31,6 +31,7 @@ def test_any_string_begins_with_double_sharp_is_considered_a_vcf_header(header):
 
 
 @given(header=st.from_regex('^(?!##).*'))
+@example(header='#C')
 def test_any_string_does_not_begin_with_double_sharp_is_not_considered_a_vcf_header(header):
     assert not is_header(header)
 
