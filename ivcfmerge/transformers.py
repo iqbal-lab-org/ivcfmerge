@@ -6,6 +6,8 @@ def annotate_filter_values(file_idx, line):
         line = line.split('\t', maxsplit=9)
         if not line[8].endswith(':FT'):
             line[8] += ':FT'
+            line[-1] = line[-1].rstrip() + ':' + line[6] + '\n'
+            line[6] = '.'
         line = '\t'.join(line)
     return line
 
