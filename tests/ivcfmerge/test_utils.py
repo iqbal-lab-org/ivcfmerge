@@ -3,7 +3,8 @@ import tempfile
 
 from hypothesis import strategies as st, given, example
 
-from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf
+from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf, split_columns
+from tests.strategies import vcf_lines
 
 
 @given(file_idx=st.integers(), lines=st.iterables(elements=st.text()))
@@ -34,6 +35,11 @@ def test_any_string_begins_with_double_sharp_is_considered_a_vcf_header(header):
 @example(header='#C')
 def test_any_string_does_not_begin_with_double_sharp_is_not_considered_a_vcf_header(header):
     assert not is_header(header)
+
+
+@given(line=vcf_lines())
+def test_split_columns(line):
+    assert split_columns(line) == line.split('\t', maxsplit=9)
 
 
 def test_write_vcf_utility_replaces_new_lines_with_tabs_for_data_lines_of_all_but_last_file():

@@ -10,6 +10,10 @@ def is_header(line):
     return line.startswith('##')
 
 
+def split_columns(line):
+    return line.split('\t', maxsplit=9)
+
+
 def write_vcf(lines, outfile, n_input_files):
     """Iterate and write header and data lines correctly
 
