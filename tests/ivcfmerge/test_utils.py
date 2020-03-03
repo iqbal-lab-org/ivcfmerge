@@ -1,9 +1,11 @@
 import itertools
+import re
 import tempfile
 
 from hypothesis import strategies as st, given, example
 
-from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf, split_columns
+from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf, split_columns, \
+    contains_field
 from tests.strategies import vcf_lines
 
 
@@ -40,6 +42,25 @@ def test_any_string_does_not_begin_with_double_sharp_is_not_considered_a_vcf_hea
 @given(line=vcf_lines())
 def test_split_columns(line):
     assert split_columns(line) == line.split('\t', maxsplit=9)
+
+
+@given(st.data())
+def test_contains_field(data):
+    field = data.draw(st.text())
+    column = data.draw(st.one_of(
+        st.from_regex(':%s' % re.escape(field)),
+        st.from_regex('%s:' % re.escape(field))
+    ))
+
+    assert contains_field(column, field)
+
+
+@given(st.data())
+def test_not_contain_field(data):
+    field = data.draw(st.text())
+    column = data.draw(st.from_regex('(?!%s)' % re.escape(field)))
+
+    assert not contains_field(column, field)
 
 
 def test_write_vcf_utility_replaces_new_lines_with_tabs_for_data_lines_of_all_but_last_file():
