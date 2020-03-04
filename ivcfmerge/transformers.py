@@ -1,12 +1,12 @@
-from .utils import is_first_file, is_header, split_columns, contains_field
+from .utils import is_first_file, is_header, split_columns, contains_field, add_field
 
 
 def annotate_filter_values(file_idx, line):
     if not line.startswith('#'):
         line = split_columns(line)
         if not contains_field(line[8], 'FT'):
-            line[8] += ':FT'
-            line[-1] = line[-1].rstrip() + ':' + line[6] + '\n'
+            line[8] = add_field(line[8], 'FT')
+            line[-1] = add_field(line[-1].rstrip(), line[6]) + '\n'
             line[6] = '.'
         line = '\t'.join(line)
     return line

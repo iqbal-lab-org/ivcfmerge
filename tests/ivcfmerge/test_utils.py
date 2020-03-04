@@ -2,10 +2,10 @@ import itertools
 import re
 import tempfile
 
-from hypothesis import strategies as st, given, example
+from hypothesis import strategies as st, given, example, assume
 
 from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf, split_columns, \
-    contains_field
+    contains_field, add_field
 from tests.strategies import vcf_lines
 
 
@@ -51,6 +51,14 @@ def test_contains_field(data):
         st.from_regex(':%s' % re.escape(field)),
         st.from_regex('%s:' % re.escape(field))
     ))
+
+    assert contains_field(column, field)
+
+
+@given(column=st.text(), field=st.text())
+def test_add_field(column, field):
+    assume(not contains_field(column, field))
+    column = add_field(column, field)
 
     assert contains_field(column, field)
 
