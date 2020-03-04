@@ -16,15 +16,15 @@ Since the FILTER value for each sample is different, we omit (set to `.`) the FI
 
 For example: These two input lines:
 
-NC_000962.3 11 . A C . **MIN_GCP** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE 0/0:6:6,0:73.54:0.74
+*NC_000962.3 11 . A C . **MIN_GCP** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE 0/0:6:6,0:73.54:0.74*
 
 and
 
-NC_000962.3 11 . A C . **MIN_DP;MIN_GCP** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE 0/0:3:3,0:36.98:0.01
+*NC_000962.3 11 . A C . **MIN_DP;MIN_GCP** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE 0/0:3:3,0:36.98:0.01*
 
 will produce this output line:
 
-NC_000962.3 11 . A C . **.** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE:**FT** 0/0:6:6,0:73.54:0.74:**MIN_GCP** 0/0:3:3,0:36.98:0.01:**MIN_DP;MIN_GCP**
+*NC_000962.3 11 . A C . **.** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE:**FT** 0/0:6:6,0:73.54:0.74:**MIN_GCP** 0/0:3:3,0:36.98:0.01:**MIN_DP;MIN_GCP***
 
 
 ## 4. Usage
