@@ -12,19 +12,19 @@ We provides a utility to merge a large number of VCF files (possibly too many to
 
 ## 3. Output format
 
-Since the FILTER value for each sample is different, we omit (set to `.`) the FILTER column in the merged result, and append the original FILTER value for each sample in their call data. Its format is described by the `FT` field in the `FORMAT` column.
+Since the `FILTER` value for each sample is different, we omit (set to `.`) the `FILTER` column in the merged result, and append the original `FILTER` value for each sample in their call data. Its format is described by the `FT` field in the `FORMAT` column.
 
 For example: These two input lines:
 
-NC_000962.3 11 . A C . **MIN_GCP** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE 0/0:6:6,0:73.54:0.74
+<span style="background:gray">NC_000962.3 11 . A C . **MIN_GCP** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE 0/0:6:6,0:73.54:0.74</span>
 
 and
 
-NC_000962.3 11 . A C . **MIN_DP;MIN_GCP** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE 0/0:3:3,0:36.98:0.01
+<span style="background:gray">NC_000962.3 11 . A C . **MIN_DP;MIN_GCP** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE 0/0:3:3,0:36.98:0.01</span>
 
 will produce this output line:
 
-NC_000962.3 11 . A C . **.** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE:**FT** 0/0:6:6,0:73.54:0.74:**MIN_GCP** 0/0:3:3,0:36.98:0.01:**MIN_DP;MIN_GCP**
+<span style="background:gray">NC_000962.3 11 . A C . **.** . GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE:**FT** 0/0:6:6,0:73.54:0.74:**MIN_GCP** 0/0:3:3,0:36.98:0.01:**MIN_DP;MIN_GCP**</span>
 
 
 ## 4. Usage
