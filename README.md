@@ -12,7 +12,7 @@ We provides a utility to merge a large number of VCF files (possibly too many to
 
 ## 3. Output format
 
-Since the FILTER value for each sample is different, we omit (set to `.`) the FILTER column in the merged result, and append the original FILTER value for each sample in their call data. Its format is described by the `FT` field in the `FORMAT` column.
+Since the FILTER value for each sample is different, we omit (set to `.`) the FILTER column in the merged result, and append the original FILTER value for each sample in their call data. Its format is described by the `FT` field in the FORMAT column.
 
 For example: These two input lines:
 
