@@ -34,7 +34,7 @@ You can use the utility as either:
 * [A Python library](#python-usage)
 * [A Python script](#cli-usage)
 
-### <a name="python-usage">3.1 In Python</a>
+### <a name="python-usage">4.1 In Python</a>
 
 #### 4.1.1 If the number of input files is small (can be opened all at once)
 
@@ -74,7 +74,7 @@ temp_dir = '...'  # for example, a directory on a mounted disk like /mnt/big_dis
 ivcfmerge_batch(filenames, output_path, batch_size, temp_dir)
 ```
 
-### <a name="cli-usage">3.2 Command line interface</a>
+### <a name="cli-usage">4.2 Command line interface</a>
 
 #### 4.2.1 If the number of input files is small (can be opened all at once)
 
