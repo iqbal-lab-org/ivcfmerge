@@ -10,6 +10,18 @@ def is_header(line):
     return line.startswith('##')
 
 
+def split_columns(line):
+    return line.split('\t', maxsplit=9)
+
+
+def contains_field(column, field):
+    return ':%s' % field in column or '%s:' % field in column
+
+
+def add_field(column, field):
+    return column + ':' + field
+
+
 def write_vcf(lines, outfile, n_input_files):
     """Iterate and write header and data lines correctly
 

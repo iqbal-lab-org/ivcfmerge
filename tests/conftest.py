@@ -6,6 +6,11 @@ def ref_merged_path():
     return 'tests/data/ref/merged.vcf'
 
 
+@pytest.fixture
+def ref_merged_single_input_path():
+    return 'tests/data/ref/merged_single_input.vcf'
+
+
 def _input_paths():
     return [
         'tests/data/input/1.vcf',
