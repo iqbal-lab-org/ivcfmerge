@@ -8,6 +8,7 @@ We provides a utility to merge a large number of VCF files (possibly too many to
 
 * All input VCFs are positionally sorted, and the values for the FILTER column of each position are the same for all samples.
 * All input VCFs have the same headers and the same number of positions.
+* All input VCFs have the FORMAT column.
 
 ## 3. Usage
 
