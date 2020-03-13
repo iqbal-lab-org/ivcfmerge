@@ -1,4 +1,5 @@
 from contextlib import ExitStack
+from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 from . import ivcfmerge
@@ -29,8 +30,16 @@ def ivcfmerge_batch(input_paths, output_path, batch_size=None, temp_dir=None):
 
     _ivcfmerge(batch, output_path)
 
+    if temp_dir:
+        clean_up_temp_dir(temp_dir)
+
 
 def _ivcfmerge(input_paths, output_path):
     with ExitStack() as stack, open(output_path, 'w+') as outfile:
         infiles = map(lambda p: stack.enter_context(open(p)), input_paths)
         ivcfmerge(infiles, outfile)
+
+
+def clean_up_temp_dir(temp_dir):
+    for path in Path(temp_dir).glob('*'):
+        path.unlink()
