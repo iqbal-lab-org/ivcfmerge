@@ -67,7 +67,7 @@ def test_custom_temporary_directory(batch_size, input_paths, ref_merged_path, tm
 
 
 @given(batch_size=st.integers(min_value=2, max_value=5))
-def test_cleaning_up_temporary_directory(batch_size, input_paths, tmpdir):
+def test_cleaning_up_temporary_files(batch_size, input_paths, tmpdir):
     temp_dir = tmpdir.mkdtemp()
 
     with NamedTemporaryFile('w+') as outfile:
@@ -75,6 +75,18 @@ def test_cleaning_up_temporary_directory(batch_size, input_paths, tmpdir):
 
     # Will throw exception if not empty
     Path(temp_dir).rmdir()
+
+
+@given(batch_size=st.integers(min_value=2, max_value=5))
+def test_not_cleaning_up_other_files(batch_size, input_paths, tmpdir):
+    temp_dir = tmpdir.mkdtemp()
+    (Path(temp_dir) / 'other').touch()
+
+    with NamedTemporaryFile('w+') as outfile:
+        ivcfmerge_batch(input_paths, outfile.name, batch_size, temp_dir)
+
+    with pytest.raises(OSError):
+        Path(temp_dir).rmdir()
 
 
 @given(batch_size=st.integers(min_value=2, max_value=5))
