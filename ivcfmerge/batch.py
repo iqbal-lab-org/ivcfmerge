@@ -1,10 +1,12 @@
 from contextlib import ExitStack
+from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 from . import ivcfmerge
 
 
 def ivcfmerge_batch(input_paths, output_path, batch_size=None, temp_dir=None):
+    temp_files = []
     batch_size = batch_size or 1000
 
     if batch_size < 2 or batch_size > len(input_paths):
@@ -27,7 +29,12 @@ def ivcfmerge_batch(input_paths, output_path, batch_size=None, temp_dir=None):
             _ivcfmerge(batch, tmp_filename)
             work_queue.append(tmp_filename)
 
+            temp_files.append(tmp_filename)
+
     _ivcfmerge(batch, output_path)
+
+    for f in temp_files:
+        Path(f).unlink()
 
 
 def _ivcfmerge(input_paths, output_path):
