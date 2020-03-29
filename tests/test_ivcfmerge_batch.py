@@ -66,7 +66,7 @@ def test_custom_temporary_directory(batch_size, input_paths, ref_merged_path, tm
         assert output == ref_merged.read()
 
 
-@given(batch_size=st.integers(min_value=2, max_value=5))
+@given(batch_size=st.integers(min_value=2, max_value=len(_input_paths())-1))
 def test_cleaning_up_temporary_files(batch_size, input_paths, tmpdir):
     temp_dir = tmpdir.mkdtemp()
 
@@ -77,7 +77,7 @@ def test_cleaning_up_temporary_files(batch_size, input_paths, tmpdir):
     Path(temp_dir).rmdir()
 
 
-@given(batch_size=st.integers(min_value=2, max_value=5))
+@given(batch_size=st.integers(min_value=2, max_value=len(_input_paths())-1))
 def test_not_cleaning_up_other_files(batch_size, input_paths, tmpdir):
     temp_dir = tmpdir.mkdtemp()
     (Path(temp_dir) / 'other').touch()
@@ -89,7 +89,7 @@ def test_not_cleaning_up_other_files(batch_size, input_paths, tmpdir):
         Path(temp_dir).rmdir()
 
 
-@given(batch_size=st.integers(min_value=2, max_value=5))
+@given(batch_size=st.integers(min_value=2, max_value=len(_input_paths())-1))
 def test_not_cleaning_up_temporary_directory_in_failures(batch_size, input_paths, tmpdir, mocker):
     temp_dir = tmpdir.mkdtemp()
 

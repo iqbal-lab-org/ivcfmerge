@@ -5,6 +5,8 @@ from pathlib import Path
 import pytest
 from hypothesis import given, strategies as st
 
+from tests.conftest import _input_paths
+
 
 def test_merging_example_input(input_paths_file, ref_merged_path, tmp_path):
     output_path = tmp_path / 'out.vcf'
@@ -38,7 +40,7 @@ def test_temporary_dir(input_paths_file, ref_merged_path, tmp_path, tmpdir, batc
         assert outfile.read() == ref_merged.read()
 
 
-@given(batch_size=st.integers(min_value=2, max_value=5))
+@given(batch_size=st.integers(min_value=2, max_value=len(_input_paths())-1))
 def test_not_cleaning_up_temporary_directory_on_sigterm(input_paths_file, tmp_path, tmpdir, batch_size, mocker):
     output_path = tmp_path / 'out.vcf'
     temp_dir = tmpdir.mkdtemp()
