@@ -2,7 +2,7 @@ import itertools
 
 from .filters import not_subsequent_header
 from .transformers import strip_fixed_columns, annotate_filter_values
-from .utils import assign_file_index_to_lines, write_vcf
+from .utils import assign_file_index_to_lines, write_vcf, split_columns, join_columns
 
 
 def ivcfmerge(infiles, outfile):
@@ -86,11 +86,15 @@ def ivcfmerge(infiles, outfile):
 
 
 def transform(file_idx, line):
-    line = annotate_filter_values(file_idx, line)
-    line = strip_fixed_columns(file_idx, line)
+    columns = split_columns(line)
 
-    # Add additional transformers here, each should be a function that receives a (file index, line) argument pair and
-    # returns the transformed line
+    columns = annotate_filter_values(file_idx, columns)
+    columns = strip_fixed_columns(file_idx, columns)
+
+    # Add additional transformers here, each should be a function that receives a (file index, columns) argument pair
+    # and returns the transformed columns
+
+    line = join_columns(columns)
 
     return file_idx, line
 
