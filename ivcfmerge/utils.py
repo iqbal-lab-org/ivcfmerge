@@ -14,6 +14,10 @@ def split_columns(line):
     return line.split('\t', maxsplit=9)
 
 
+def join_columns(columns):
+    return '\t'.join(columns)
+
+
 def contains_field(column, field):
     return ':%s' % field in column or '%s:' % field in column
 

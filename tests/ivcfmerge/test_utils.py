@@ -5,7 +5,7 @@ import tempfile
 from hypothesis import strategies as st, given, example, assume
 
 from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf, split_columns, \
-    contains_field, add_field
+    contains_field, add_field, join_columns
 from tests.strategies import vcf_lines
 
 
@@ -42,6 +42,11 @@ def test_any_string_does_not_begin_with_double_sharp_is_not_considered_a_vcf_hea
 @given(line=vcf_lines())
 def test_split_columns(line):
     assert split_columns(line) == line.split('\t', maxsplit=9)
+
+
+@given(line=vcf_lines())
+def test_join_columns(line):
+    assert join_columns(split_columns(line)) == line
 
 
 @given(st.data())
