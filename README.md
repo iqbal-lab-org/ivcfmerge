@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/iqbal-lab-org/ivcfmerge.svg?branch=master)](https://travis-ci.com/iqbal-lab-org/ivcfmerge)
+
 # ivcfmerge: Incremental VCF merge
 
 ## 1. Purpose
