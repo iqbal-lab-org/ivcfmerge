@@ -5,7 +5,7 @@ from .transformers import strip_fixed_columns, annotate_filter_values
 from .utils import assign_file_index_to_lines, write_vcf, split_columns, join_columns
 
 
-def ivcfmerge(infiles, outfile):
+def ivcfmerge(infiles, outfile, is_last_or_only_batch=True):
     infiles_1, infiles_2 = itertools.tee(infiles)
     n_infiles = len(list(infiles_1))
 
@@ -82,7 +82,7 @@ def ivcfmerge(infiles, outfile):
     filtered = apply_filters(transformed)
 
     # Actually iterate the lines and write them
-    write_vcf(filtered, outfile, n_infiles)
+    write_vcf(filtered, outfile, n_infiles, is_last_or_only_batch)
 
 
 def transform(file_idx, line):
