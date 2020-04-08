@@ -5,7 +5,7 @@ import tempfile
 from hypothesis import strategies as st, given, example, assume
 
 from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf, split_columns, \
-    contains_field, add_field, join_columns
+    contains_field, add_field, join_columns, is_column_names
 from ivcfmerge.utils.test.strategies import vcf_lines
 
 
@@ -37,6 +37,16 @@ def test_any_string_begins_with_double_sharp_is_considered_a_vcf_header(header):
 @example(header='#C')
 def test_any_string_does_not_begin_with_double_sharp_is_not_considered_a_vcf_header(header):
     assert not is_header(header)
+
+
+@given(line=st.from_regex('^#C'))
+def test_is_column_names(line):
+    assert is_column_names(line)
+
+
+@given(line=st.from_regex('^#[^C]'))
+def test_is_not_column_names(line):
+    assert not is_column_names(line)
 
 
 @given(line=vcf_lines())

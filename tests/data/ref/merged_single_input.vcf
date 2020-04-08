@@ -9,6 +9,7 @@
 ##FILTER=<ID=MIN_DP,Description="Minimum DP of 5">
 ##FORMAT=<ID=GT_CONF_PERCENTILE,Number=1,Type=Float,Description="Percentile of GT_CONF">
 ##minos_max_read_length=150
+##FORMAT=<ID=FT,Number=1,Type=String,Description="Per sample filter">
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	site.20.iso.1.subject.SA01653559.lab_id.YA00131617.seq_reps.1
 NC_000962.3	11	.	A	C	.	.	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE:FT	0/0:6:6,0:73.54:0.74:MIN_GCP
 NC_000962.3	19	.	T	A	.	.	.	GT:DP:COV:GT_CONF:GT_CONF_PERCENTILE:FT	0/0:9:9,0:198.51:1.1:MIN_GCP

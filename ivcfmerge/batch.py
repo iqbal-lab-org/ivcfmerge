@@ -26,7 +26,7 @@ def ivcfmerge_batch(input_paths, output_path, batch_size=None, temp_dir=None):
                 break
 
             tmp_filename = NamedTemporaryFile(dir=temp_dir).name
-            _ivcfmerge(batch, tmp_filename)
+            _ivcfmerge(batch, tmp_filename, is_last_or_only_batch=False)
             work_queue.append(tmp_filename)
 
             temp_files.append(tmp_filename)
@@ -37,7 +37,7 @@ def ivcfmerge_batch(input_paths, output_path, batch_size=None, temp_dir=None):
         Path(f).unlink()
 
 
-def _ivcfmerge(input_paths, output_path):
+def _ivcfmerge(input_paths, output_path, is_last_or_only_batch=True):
     with ExitStack() as stack, open(output_path, 'w+') as outfile:
         infiles = map(lambda p: stack.enter_context(open(p)), input_paths)
-        ivcfmerge(infiles, outfile)
+        ivcfmerge(infiles, outfile, is_last_or_only_batch)
