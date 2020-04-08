@@ -7,3 +7,15 @@ def sample_input_paths():
         'tests/data/input/5.vcf',
         'tests/data/input/6.vcf',
     ]
+
+
+def sample_input_paths_file():
+    return 'tests/data/input_paths.txt'
+
+
+def reference_merged_path():
+    return 'tests/data/ref/merged.vcf'
+
+
+def reference_merged_single_input_path():
+    return 'tests/data/ref/merged_single_input.vcf'
