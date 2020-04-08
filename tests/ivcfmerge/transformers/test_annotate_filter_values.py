@@ -2,7 +2,7 @@ from hypothesis import given, strategies as st
 
 from ivcfmerge.transformers import annotate_filter_values
 from ivcfmerge.utils import split_columns
-from tests.strategies import vcf_lines
+from ivcfmerge.utils.test.strategies import vcf_lines
 
 
 @given(file_idx=st.integers(), line=st.from_regex('^##'))

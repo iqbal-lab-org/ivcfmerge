@@ -2,7 +2,7 @@ from hypothesis import given, strategies as st
 
 from ivcfmerge.transformers import strip_fixed_columns
 from ivcfmerge.utils import split_columns
-from tests.strategies import vcf_lines
+from ivcfmerge.utils.test.strategies import vcf_lines
 
 
 @given(file_idx=st.just(0), line=st.text())

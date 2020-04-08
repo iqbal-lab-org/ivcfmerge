@@ -6,7 +6,7 @@ from hypothesis import strategies as st, given, example, assume
 
 from ivcfmerge.utils import assign_file_index_to_lines, is_first_file, is_header, write_vcf, split_columns, \
     contains_field, add_field, join_columns
-from tests.strategies import vcf_lines
+from ivcfmerge.utils.test.strategies import vcf_lines
 
 
 @given(file_idx=st.integers(), lines=st.iterables(elements=st.text()))
