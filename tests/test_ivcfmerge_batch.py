@@ -6,7 +6,7 @@ import pytest
 from hypothesis import given, strategies as st
 
 from ivcfmerge import ivcfmerge_batch, ivcfmerge
-from tests.conftest import _input_paths
+from ivcfmerge.utils.test.fixtures import sample_input_paths
 
 
 @given(batch_size=st.integers(min_value=2))
@@ -20,7 +20,7 @@ def test_merging_example_input(batch_size, input_paths, ref_merged_path):
 
 @given(batch_size=st.one_of(
     st.integers(max_value=1),
-    st.integers(min_value=len(_input_paths()))
+    st.integers(min_value=len(sample_input_paths()))
 ))
 def test_out_of_bound_batch_sizes_yield_the_same_output_as_normal_ivcfmerge(batch_size, input_paths):
     with ExitStack() as stack:
@@ -66,7 +66,7 @@ def test_custom_temporary_directory(batch_size, input_paths, ref_merged_path, tm
         assert output == ref_merged.read()
 
 
-@given(batch_size=st.integers(min_value=2, max_value=len(_input_paths())-1))
+@given(batch_size=st.integers(min_value=2, max_value=len(sample_input_paths()) - 1))
 def test_cleaning_up_temporary_files(batch_size, input_paths, tmpdir):
     temp_dir = tmpdir.mkdtemp()
 
@@ -77,7 +77,7 @@ def test_cleaning_up_temporary_files(batch_size, input_paths, tmpdir):
     Path(temp_dir).rmdir()
 
 
-@given(batch_size=st.integers(min_value=2, max_value=len(_input_paths())-1))
+@given(batch_size=st.integers(min_value=2, max_value=len(sample_input_paths()) - 1))
 def test_not_cleaning_up_other_files(batch_size, input_paths, tmpdir):
     temp_dir = tmpdir.mkdtemp()
     (Path(temp_dir) / 'other').touch()
@@ -89,7 +89,7 @@ def test_not_cleaning_up_other_files(batch_size, input_paths, tmpdir):
         Path(temp_dir).rmdir()
 
 
-@given(batch_size=st.integers(min_value=2, max_value=len(_input_paths())-1))
+@given(batch_size=st.integers(min_value=2, max_value=len(sample_input_paths()) - 1))
 def test_not_cleaning_up_temporary_directory_in_failures(batch_size, input_paths, tmpdir, mocker):
     temp_dir = tmpdir.mkdtemp()
 
