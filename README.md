@@ -32,7 +32,8 @@ will produce this output line:
 You can use the utility as either:
 
 * [A Python library](#python-usage)
-* [A Python script](#cli-usage)
+* [A Python script (no installation)](#cli-usage-no-install)
+* [A Python script (installed in your environment)](#cli-usage-install)
 
 ### <a name="python-usage">4.1 In Python</a>
 
@@ -74,7 +75,7 @@ temp_dir = '...'  # for example, a directory on a mounted disk like /mnt/big_dis
 ivcfmerge_batch(filenames, output_path, batch_size, temp_dir)
 ```
 
-### <a name="cli-usage">4.2 Command line interface</a>
+### <a name="cli-usage-no-install">4.2 Command line interface (no installation)</a>
 
 #### 4.2.1 If the number of input files is small (can be opened all at once)
 
@@ -109,6 +110,16 @@ That has at least as much space as that occupied by the input files to store int
 
 > python ivcfmerge_batch.py --batch-size 1000 --temp-dir /path/to/tmp/dir input_paths.txt path/to/output/file
 ```
+
+### <a name="cli-usage-install">4.3 Command line interface (with installation)</a>
+
+```shell script
+pip3 install .
+ivcfmerge -h
+ivcfmerge_batch -h
+```
+
+All CLI arguments & options are the same as described in [4.2](#cli-usage-no-install).
 
 ## 5. Important parameters
  
